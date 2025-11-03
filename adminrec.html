@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STPRスタッフ募集</title>
+<style>
+body { font-family:'Hiragino Sans','Noto Sans JP',sans-serif; background:#f9f9f9; margin:0; padding:20px; }
+.container { max-width:600px; margin:auto; text-align:center; }
+h2 { margin-bottom:20px; }
+form { background:white; padding:20px; border-radius:12px; box-shadow:0 6px 20px rgba(0,0,0,0.05); text-align:left; }
+input, textarea, button { width:100%; padding:8px; margin:6px 0; border-radius:6px; border:1px solid #ccc; }
+button { background:#2563eb; color:white; border:none; cursor:pointer; }
+button:hover { opacity:0.9; }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>STPR情報部 スタッフ募集</h1>
+  <p>STPR情報部の管理者を募集いたします。<br>
+  基本的な活動内容は以下の通りです。<br>
+  ・ライブ配信の切り抜き活動<br>
+  ・当サイトの更新作業<br>
+  ・Discordサーバーの案内係,モデレーター<br>
+  以下のフォームよりご応募ください。<br>
+  ＜必須条件＞<br>
+  ・13歳以上<br>
+  ・Discordへの参加<br>
+  ・週3日以上の活動が可能な方<br>
+  ＜優遇条件＞<br>
+  ・STPR Familyの配信を基本的にすべて見れる<br>
+  ・切り抜き活動の経験がある方</p>
+
+  <form id="applyForm">
+    <h2>スタッフ募集フォーム</h2>
+
+    <label>希望職種（複数選択可）</label>
+    <label><input type="checkbox" name="jobs" value="切り抜き"> 切り抜き</label>
+    <label><input type="checkbox" name="jobs" value="サイト更新作業"> サイト更新作業</label>
+    <label><input type="checkbox" name="jobs" value="Discordモデレーター"> Discordモデレーター</label>
+    <label><input type="checkbox" name="jobs" value="dev"> デベロッパー(システム開発など)</label>
+
+    <label>メールアドレス</label>
+    <input type="email" id="email" required placeholder="you@example.com">
+
+    <label>Discordの名前</label>
+    <input type="text" id="discord" required placeholder="例: tamachi#1234">
+
+    <label>志望動機・自己PR</label>
+    <textarea id="motivation" placeholder="例: チームに貢献したいと思っています..." style="min-height:100px;"></textarea>
+
+    <button type="submit">送信</button>
+  </form>
+</div>
+
+<script>
+// 👇 Discord Webhook URL を設定
+const WEBHOOK_URL = "https://discord.com/api/webhooks/1432624409092292629/7o5a2eW-n0xhe6S3ow9w7gPvZ6gCHygi1HlFfPMxNyO58CQNRCV__On0G70Cl9UU3z7F";
+
+const form = document.getElementById('applyForm');
+form.addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const jobs = Array.from(document.querySelectorAll('input[name="jobs"]:checked')).map(el => el.value);
+  const email = document.getElementById('email').value.trim();
+  const discord = document.getElementById('discord').value.trim();
+  const motivation = document.getElementById('motivation').value.trim();
+
+  if (!email || !discord) {
+    alert("メールアドレスとDiscord名を入力してください。");
+    return;
+  }
+
+  const content = 
+`📋 **新しい応募が届きました！**
+💼 希望職種: ${jobs.length ? jobs.join(', ') : '未選択'}
+📧 メール: ${email}
+💬 Discord: ${discord}
+
+📝 志望動機・自己PR:
+${motivation || '（未記入）'}`;
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content })
+    });
+    alert("Discordに送信しました！");
+    form.reset();
+  } catch(err) {
+    alert("送信中にエラーが発生しました。");
+    console.error(err);
+  }
+});
+</script>
+
+</body>
+</html>
