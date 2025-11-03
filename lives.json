@@ -1,0 +1,17 @@
+{
+  "lives": [
+    {
+      "title": "",
+      "date": "",
+      "place": "",
+      "prefecture": "",
+      "open_time": "",
+      "start_time": "",
+      "ticket": {
+        "price": "",
+        "url": ""
+      },
+      "notes": ""
+    }
+  ]
+}
